@@ -25,6 +25,7 @@ export default class SPService implements ISPService {
       }
       return [];
     } catch (error) {
+      console.log(`Error get Items: ${error}`);
       return Promise.reject(error);
     }
   }
