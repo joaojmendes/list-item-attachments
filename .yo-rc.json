@@ -1,0 +1,16 @@
+{
+  "@pnp/generator-spfx": {
+    "framework": "react",
+    "pnpFramework": "react"
+  },
+  "@microsoft/generator-sharepoint": {
+    "framework": "react",
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "version": "1.6.0",
+    "libraryName": "list-item-picker",
+    "libraryId": "6b669c3d-c4b1-445e-82d8-bc924958b841",
+    "packageManager": "npm",
+    "componentType": "webpart"
+  }
+}
