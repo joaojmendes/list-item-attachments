@@ -4,11 +4,11 @@ This control allows you to select one or more  item from list, based in a column
 
 Here is an example of the control:
 
-![ListItemPicker select list items](../assets/ListItemPicker-selectlist.png)
+![ListItemPicker select list items](./assets/ListItemPicker-selectlist.png)
 
-![ListItemPicker select list items](../assets/ListItemPicker-selectlist2.png)
+![ListItemPicker select list items](./assets/ListItemPicker-selectlist2.png)
 
-![ListItemPicker selected Items](../assets/ListItemPicker-selectedItems.png)
+![ListItemPicker selected Items](./assets/ListItemPicker-selectedItems.png)
 
 ## How to use this control in your solutions
 
