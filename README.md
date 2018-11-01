@@ -1,6 +1,6 @@
 # ListItemPicker control
 
-This control allows you to select one or more  item from list, based in a column value, the control sugest values based on charaters typed 
+This control allows you to select one or more  item from list, based in a column value, the control suggest values based on characters typed 
 
 Here is an example of the control:
 
