@@ -1,7 +1,7 @@
 {
   "name": "list-item-picker",
-  "version": "0.0.1",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
   "engines": {
     "node": ">=0.10.0"
   },
