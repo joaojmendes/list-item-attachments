@@ -1,4 +1,4 @@
-export interface IListItemPickerState {
+export interface IListItemAttachmentsState {
   noresultsFoundText: string;
   showError: boolean;
   errorMessage: string;

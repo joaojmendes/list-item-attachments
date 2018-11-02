@@ -4,14 +4,14 @@ import SPservice from "../../services/SPService";
 import { escape } from "@microsoft/sp-lodash-subset";
 import { TagPicker } from "office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker";
 import { Label } from "office-ui-fabric-react/lib/Label";
-import { IListItemPickerProps, IListItemPickerState } from ".";
+import { IListItemAttachmentsProps, IListItemAttachmentsState } from ".";
 
-export class ListItemPicker extends React.Component<IListItemPickerProps, IListItemPickerState> {
+export class ListItemAttachments extends React.Component<IListItemAttachmentsProps, IListItemAttachmentsState> {
   private _value: any[];
   private _spservice: SPservice;
   private selectedItems: any[];
 
-  constructor(props: IListItemPickerProps) {
+  constructor(props: IListItemAttachmentsProps) {
     super(props);
     // States
     console.log(`string1: ${strings.genericNoResultsFoundText}`);
@@ -32,7 +32,7 @@ export class ListItemPicker extends React.Component<IListItemPickerProps, IListI
     this.selectedItems = [];
   }
 
-  public componentDidUpdate(prevProps: IListItemPickerProps, prevState: IListItemPickerState): void {
+  public componentDidUpdate(prevProps: IListItemAttachmentsProps, prevState: IListItemAttachmentsState): void {
     if (this.props.listId !== prevProps.listId) {
       this.selectedItems = [];
     }
@@ -41,7 +41,7 @@ export class ListItemPicker extends React.Component<IListItemPickerProps, IListI
   /**
    * Render the field
    */
-  public render(): React.ReactElement<IListItemPickerProps> {
+  public render(): React.ReactElement<IListItemAttachmentsProps> {
     const { className, disabled, itemLimit } = this.props;
 
     return (

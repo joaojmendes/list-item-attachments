@@ -1,7 +1,7 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 
-export interface IListItemPickerProps {
+export interface IListItemAttachmentsProps {
   listId: string;
   columnInternalName:string;
   onSelectedItem: (item:any) => void;
