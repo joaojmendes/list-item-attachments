@@ -3,14 +3,9 @@ import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 
 export interface IListItemAttachmentsProps {
   listId: string;
-  columnInternalName:string;
-  onSelectedItem: (item:any) => void;
+  itemId: number;
   className?: string;
   webUrl?:string;
-  value?:Array<string>;
   disabled?: boolean;
-  itemLimit: number;
   context: WebPartContext |  ApplicationCustomizerContext;
-  sugestedHeaderText?:string;
-  noresultsFoundText?:string;
 }

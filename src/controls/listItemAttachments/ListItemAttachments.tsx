@@ -1,138 +1,230 @@
-import * as strings from 'ControlStrings';
-import * as React from "react";
-import SPservice from "../../services/SPService";
-import { escape } from "@microsoft/sp-lodash-subset";
-import { TagPicker } from "office-ui-fabric-react/lib/components/pickers/TagPicker/TagPicker";
+import * as React from 'react';
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton, } from 'office-ui-fabric-react/lib/Button';
+import { Icon, IconType } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from "office-ui-fabric-react/lib/Label";
-import { IListItemAttachmentsProps, IListItemAttachmentsState } from ".";
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import * as strings from 'ControlStrings';
+import styles from './ListItemAttachments.module.scss';
 
-export class ListItemAttachments extends React.Component<IListItemAttachmentsProps, IListItemAttachmentsState> {
-  private _value: any[];
+import {
+  DocumentCard,
+  DocumentCardActions,
+  DocumentCardPreview,
+  DocumentCardTitle,
+  IDocumentCardPreviewImage
+} from 'office-ui-fabric-react/lib/DocumentCard';
+import { ImageFit } from 'office-ui-fabric-react/lib/Image';
+import { IListItemAttachmentsProps } from './IListItemAttachmentsProps';
+import SPservice from "../../services/SPservice";
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+// Links to Icons
+export const DOCICONURL_XLSX = "https://spoprod-a.akamaihd.net/files/fabric/assets/item-types/96/xlsx.png";
+export const DOCICONURL_DOCX = "https://spoprod-a.akamaihd.net/files/fabric/assets/item-types/96/docx.png";
+export const DOCICONURL_PPTX = "https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/png/pptx_16x3.png";
+export const DOCICONURL_MPPX = "https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/png/mppx_16x3.png";
+export const DOCICONURL_PHOTO = "https://sonaesystems.sharepoint.com/sites/prm/HtmlWebParts/raidiDetail/build/static/css/PHOTO.png";
+export const DOCICONURL_PDF = "https://sonaesystems.sharepoint.com/sites/prm/HtmlWebParts/raidiDetail/build/static/css/PDF.png";
+export const DOCICONURL_TXT = "https://sonaesystems.sharepoint.com/sites/prm/HtmlWebParts/raidiDetail/build/static/css/TXT.png";
+
+export class ListItemAttachments extends React.Component<IListItemAttachmentsProps, any> {
   private _spservice: SPservice;
-  private selectedItems: any[];
+  private previewImages: IDocumentCardPreviewImage[];
 
   constructor(props: IListItemAttachmentsProps) {
     super(props);
-    // States
-    console.log(`string1: ${strings.genericNoResultsFoundText}`);
     this.state = {
-      noresultsFoundText: !this.props.noresultsFoundText ? strings.genericNoResultsFoundText : this.props.noresultsFoundText,
-     // noresultsFoundText: typeof this.props.noresultsFoundText === undefined ? strings.genericNoResultsFoundText : this.props.noresultsFoundText,
-      showError: false,
-      errorMessage: "",
-    //  suggestionsHeaderText: typeof this.props.sugestedHeaderText === undefined ? strings.ListItemPickerSelectValue : this.props.sugestedHeaderText
-    suggestionsHeaderText:   !this.props.sugestedHeaderText  ? strings.ListItemPickerSelectValue : this.props.sugestedHeaderText
-  };
+      file: '',
+      showDialog: false,
+      dialogMessage: '',
+      Documents: []
+    };
 
     // Get SPService Factory
     this._spservice = new SPservice(this.props.context);
-
-    // Test Parameters
-    this._value = this.props.value !== undefined ? this.props.value : [];
-    this.selectedItems = [];
+    // registo de event handlers
+    //
+    this._onDeleteAttachment = this._onDeleteAttachment.bind(this);
+    this._closeDialog = this._closeDialog.bind(this);
+    this._onUploadFile = this._onUploadFile.bind(this);
   }
+  // Load Item Attachments
+  private async _loadAttachments() {
+    this.previewImages = [];
+    try {
+      let files = await this._spservice.getListItemAttachments(this.props.listId, this.props.itemId);
+      console.log(`nr files ${files.length}`);
+      for (const _file of files) {
+        let _iconUrl = '';
+        let _fileTypes = _file.ServerRelativeUrl.split('.');
+        let _fileExtention = _fileTypes[1];
 
-  public componentDidUpdate(prevProps: IListItemAttachmentsProps, prevState: IListItemAttachmentsState): void {
-    if (this.props.listId !== prevProps.listId) {
-      this.selectedItems = [];
+        switch (_fileExtention) {
+          case 'xlsx':
+            _iconUrl = DOCICONURL_XLSX;
+            break;
+          case 'docx':
+            _iconUrl = DOCICONURL_DOCX;
+            break;
+          case 'pptx':
+            _iconUrl = DOCICONURL_PPTX;
+            break;
+          case 'TXT':
+            _iconUrl = '';
+            break;
+          case 'MPPX':
+            _iconUrl = DOCICONURL_MPPX;
+            break;
+          case 'PDF':
+            _iconUrl = DOCICONURL_PDF;
+            break;
+          case 'TXT':
+            _iconUrl = DOCICONURL_TXT;
+            break;
+          case 'jpg':
+            _iconUrl = DOCICONURL_PHOTO;
+            break;
+          case 'png':
+            _iconUrl = DOCICONURL_PHOTO;
+            break;
+          case 'gif':
+            _iconUrl = DOCICONURL_PHOTO;
+            break;
+          default:
+            _iconUrl = DOCICONURL_DOCX;
+            break;
+        }
+        console.log(`IconURL: ${_iconUrl}`);
+
+        this.previewImages.push({
+          name: _file.FileName,
+          previewImageSrc: _iconUrl,
+          iconSrc: '',
+          imageFit: ImageFit.center,
+          width: 187,
+          height: 130,
+
+        });
+        console.dir(this.previewImages);
+      }
+      this.setState({
+        showDialog: false,
+        dialogMessage: '',
+        Documents: files
+      });
+    }
+    catch (error) {
+      this.setState({
+        showDialog: true,
+        // tslint:disable-next-line:max-line-length
+        dialogMessage: 'Error on read file Attachments. Error: ' + error.message
+      });
     }
   }
 
-  /**
-   * Render the field
-   */
-  public render(): React.ReactElement<IListItemAttachmentsProps> {
-    const { className, disabled, itemLimit } = this.props;
+  // Run befor render component
+  public componentDidMount() {
+    this._loadAttachments();
+  }
 
+  // Render Attachments
+  public render() {
     return (
-      <div>
-        <TagPicker onResolveSuggestions={this.onFilterChanged}
-                   //   getTextFromItem={(item: any) => { return item.name; }}
-                   getTextFromItem={this.getTextFromItem}
-                   pickerSuggestionsProps={{
-                     suggestionsHeaderText: this.state.suggestionsHeaderText,
-                     noResultsFoundText: this.state.noresultsFoundText
-                   }}
-                   defaultSelectedItems={this._value}
-                   onChange={this.onItemChanged}
-                   className={className}
-                   itemLimit={itemLimit}
-                   disabled={disabled} />
+      <div style={styles.ListItemAttachments}>
+        {this.state.Documents.map((_file: any, i: number) => {
+          return (
+            <div className={styles.documentCardWrapper}>
 
-        <Label style={{color:'#FF0000'}}> {this.state.errorMessage} </Label>
+              <TooltipHost
+                content={_file.FileName}
+                id="attach"
+                calloutProps={{ gapSpace: 0, isBeakVisible: true }} closeDelay={200} directionalHint={DirectionalHint.rightCenter}>
+                <DocumentCard
+                  onClickHref={_file.ServerRelativeUrl}
+                  className={styles.documentCard}>
+                  <DocumentCardPreview previewImages={[this.previewImages[i]]} />
+                  <Label style={{ marginLeft: 12, marginRight: 12, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                    {_file.FileName}
+                  </Label>
+                  <DocumentCardActions
+                    actions={
+                      [
+                        {
+                          iconProps: {
+                            iconName: 'Delete',
+                            title: 'Delete',
+                            style: { 'float': 'right' }
+                          },
+                          title: 'Delete',
+                          text: 'Delete',
+                          disabled: this.props.disabled,
+                          className: this.props.disabled ? 'documentAction-disabled' : 'documentAction',
+                          onClick: (ev: any) => {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+
+                            this._onDeleteAttachment(_file.FileName);
+                          }
+                        },
+                      ]
+                    }
+                  />
+                </DocumentCard>
+              </TooltipHost>
+            </div>
+
+          );
+        })}
+        <Dialog
+          isOpen={this.state.showDialog}
+          type={DialogType.normal}
+          onDismiss={this._closeDialog}
+          title="Attachments"
+          subText={this.state.dialogMessage}
+          isBlocking={true}>
+          <DialogFooter>
+            <PrimaryButton onClick={this._closeDialog}>OK</PrimaryButton>
+          </DialogFooter>
+        </Dialog>
       </div>
     );
   }
 
-  /**
-   * Get text from Item
-   */
-  private getTextFromItem(item: any): string {
-    return item.name;
+  // close dialog
+  private _closeDialog(e: any) {
+    //
+    e.preventDefault();
+    this.setState({
+      showDialog: false,
+      dialogMessage: '',
+    });
   }
 
-  /**
-   * On Selected Item
-   */
-  private onItemChanged = (selectedItems: { key: string; name: string }[]): void => {
-    this.selectedItems = selectedItems;
-    this.props.onSelectedItem(selectedItems);
+  // On UploadFIle
+  private _onUploadFile(file: any) {
+    //
+    this._loadAttachments();
   }
+  private _onDeleteAttachment(_file: any) {
 
-  /**
-   * Filter Change
-   */
-  private onFilterChanged = async (filterText: string, tagList: { key: string; name: string }[]) => {
-    let resolvedSugestions: { key: string; name: string }[] = await this.loadListItems(filterText);
-
-    // Filter out the already retrieved items, so that they cannot be selected again
-    if (this.selectedItems && this.selectedItems.length > 0) {
-      let filteredSuggestions = [];
-      for (const suggestion of resolvedSugestions) {
-        const exists = this.selectedItems.filter(sItem => sItem.key === suggestion.key);
-        if (!exists || exists.length === 0) {
-          filteredSuggestions.push(suggestion);
-        }
-      }
-      resolvedSugestions = filteredSuggestions;
-    }
-
-    if (resolvedSugestions) {
-      this.setState({
-        errorMessage: "",
-        showError: false
+    // Delete Attachment
+    this._spservice.deleteAttachment(_file, this.props.listId, this.props.itemId, this.props.webUrl)
+      .then(() => {
+        this.setState({
+          showDialog: true,
+          dialogMessage: 'File ' + _file + ' Deleted.',
+        });
+        this._loadAttachments();
+      })
+      .catch((reason: any) => {
+        this.setState({
+          showDialog: true,
+          // tslint:disable-next-line:max-line-length
+          dialogMessage: 'Error on delete file: ' + _file + ' Error: ' + reason
+        });
       });
 
-      return resolvedSugestions;
-    } else {
-      return [];
-    }
   }
 
-  /**
-   * Function to load List Items
-   */
-  private loadListItems = async (filterText: string): Promise<{ key: string; name: string }[]> => {
-    let { listId, columnInternalName, webUrl } = this.props;
-    let arrayItems: { key: string; name: string }[] = [];
-
-    try {
-      let listItems = await this._spservice.getListItems(filterText, listId, columnInternalName, webUrl);
-      // Check if the list had items
-      if (listItems.length > 0) {
-        for (const item of listItems) {
-          arrayItems.push({ key: item.Id, name: item[columnInternalName] });
-        }
-      }
-      return arrayItems;
-    } catch (error) {
-      console.log(`Error get Items`, error);
-      this.setState({
-        showError: true,
-        errorMessage: error.message,
-        noresultsFoundText: error.message
-      });
-      return null;
-    }
-  }
 }
+export default ListItemAttachments;

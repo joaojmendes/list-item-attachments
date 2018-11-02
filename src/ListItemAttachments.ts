@@ -1,1 +1,1 @@
-export * from './controls/listItemPicker';
+export * from './controls/listItemAttachments';

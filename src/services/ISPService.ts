@@ -9,4 +9,5 @@ export interface ISPService {
      */
 
     getListItems?(filterText: string, listId: string, internalColumnName: string, webUrl?: string) : Promise<any[]>;
+    getListItemAttachments(listId: string,itemId: number, webUrl?: string): Promise<any[]>;
 }
