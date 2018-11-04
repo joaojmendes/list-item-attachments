@@ -1,6 +1,14 @@
 declare interface IControlStrings {
-  ListItemPickerSelectValue: string;
-  genericNoResultsFoundText: string;
+  actionDeleteIconTitle: string;
+  actionDeleteTitle: string;
+  fileDeletedMsg: string;
+  fileDeleteError: string;
+  errorLoadAttachments: string;
+  confirmDelete: string;
+  dialogTitle: string;
+  dialogOKbuttonLabel: string;
+  dialogCancelButtonLabel: string;
+  dialogOKbuttonLabelOnDelete: string;
 }
 
 declare module 'ControlStrings' {

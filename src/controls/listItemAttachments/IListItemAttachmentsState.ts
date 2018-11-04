@@ -1,6 +1,8 @@
+import {IListItemAttachmentFile } from './IListItemAttachmentFile';
 export interface IListItemAttachmentsState {
-  noresultsFoundText: string;
-  showError: boolean;
-  errorMessage: string;
-  suggestionsHeaderText:string;
+      file: IListItemAttachmentFile;
+      showDialog: boolean;
+      dialogMessage: string;
+      Documents: IListItemAttachmentFile[];
+      deleteAttachment: boolean;
 }

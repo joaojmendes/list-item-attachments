@@ -21,4 +21,12 @@
    display: inline-block;
    margin-Left: 12px
   }
+
+  .fileLabel {
+    margin-Left: 12px;
+     margin-Right: 12px;
+     overflow: 'hidden';
+     white-Space: 'nowrap';
+     text-overflow: 'ellipsis';
+    }
 }
