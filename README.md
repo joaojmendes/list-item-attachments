@@ -1,15 +1,15 @@
 # List-Item-Attachments control
 
-This control allows you to manage list Item Attachments, you can add or delete associated attachments,
+This control allows you to manage list Item Attachments, you can add or delete associated attachments, the attachments are listed in tile view.
  
 
 Here is an example of the control:
 
-![ListItemPicker select list items](./assets/ListItemPicker-selectlist.png)
+![ListItemAttachments Tiles](./assets/ListItemAttachmentsTitles.png)
 
-![ListItemPicker select list items](./assets/ListItemPicker-selectlist2.png)
+![ListItemAttachments Confirm Delete](./assets/ListItemAttachmentsDeleteConfirm.png)
 
-![ListItemPicker selected Items](./assets/ListItemPicker-selectedItems.png)
+![ListItemAttachments Attachment Deleted ](./assets/ListItemAttachmentsDeleteMsg.png)
 
 ## How to use this control in your solutions
 

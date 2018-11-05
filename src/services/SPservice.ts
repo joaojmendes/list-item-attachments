@@ -97,12 +97,12 @@ export default class SPService {
     } else {
       spWeb = new Web(this._context.pageContext.web.absoluteUrl);
     }
-
+ 
     try {
       let files = await spWeb.lists
         .getById(listId)
         .items.getById(itemId)
-        .attachmentFiles.add(fileName, file);
+        .attachmentFiles.add(encodeURIComponent(fileName), file);
       return ;
     } catch (error) {
       return Promise.reject(error);
