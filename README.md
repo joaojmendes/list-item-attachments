@@ -50,22 +50,10 @@ The `ListItemPicker` control can be configured with the following properties:
 <td>Gui of List</td>
 </tr>
 <tr>
-<td>columnInternalName</td>
+<td>itemId</td>
 <td>string</td>
 <td>yes</td>
-<td>InternalName of column to search and get values</td>
-</tr>
-<tr>
-<td>onSelectedItem: (item:any) =>void;</td>
-<td>function</td>
-<td>yes</td>
-<td>Callback function</td>
-</tr>
-<tr>
-<td>className</td>
-<td>string</td>
-<td>no</td>
-<td>CSS className</td>
+<td>List Item Id</td>
 </tr>
 <tr>
 <td>webUrl</td>
@@ -74,40 +62,16 @@ The `ListItemPicker` control can be configured with the following properties:
 <td>URL of site if different of current site, user must have permissions</td>
 </tr>
 <tr>
-<td>value</td>
-<td>Array</td>
-<td>no</td>
-<td>Default Value</td>
-</tr>
-<tr>
 <td>disabled</td>
 <td>Boolean</td>
 <td>no</td>
 <td>Disable Control</td>
 </tr>
 <tr>
-<td>itemLimit</td>
-<td>number</td>
-<td>yes</td>
-<td>Number os items to select / return</td>
-</tr>
-<tr>
 <td>context</td>
 <td>WebPartContext|ApplicationCustomizerContext</td>
 <td>yes</td>
 <td>WebPart or Application customiser context</td>
-</tr>
-<tr>
-<td>sugestedHeaderText</td>
-<td>string</td>
-<td>no</td>
-<td>Text header to display</td>
-</tr>
-<tr>
-<td>noresultsFoundTextstring</td>
-<td>string</td>
-<td>no</td>
-<td>Text message when no items</td>
 </tr>
 </tbody>
 </table>		
