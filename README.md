@@ -68,12 +68,6 @@ The `ListItemAttachments` control can be configured with the following propertie
 <td>Disable Control</td>
 </tr>
 <tr>
-<td>className</td>
-<td>string</td>
-<td>no</td>
-<td>Class Name</td>
-</tr>
-<tr>
 <td>context</td>
 <td>WebPartContext|ApplicationCustomizerContext</td>
 <td>yes</td>
