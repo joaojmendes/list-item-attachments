@@ -21,7 +21,7 @@ export default class TestControl extends React.Component<ITestControlProps, {}> 
             listId='dfa283f4-5faf-4d54-b6b8-5bcaf2725af5'
             itemId={1}
             context={this.props.context}
-            disabled={true}
+            disabled={false}
           />
         </div>
       </div>
