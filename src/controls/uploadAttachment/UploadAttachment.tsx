@@ -9,11 +9,11 @@ import styles from './UploadAttachment.module.scss';
 import SPservice from "../../services/SPservice";
 import * as strings from 'ControlStrings';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 
 export class UploadAttachment extends React.Component<IUploadAttachmentProps, IUploadAttachmentState> {
   private _spservice: SPservice;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,13 +22,12 @@ export class UploadAttachment extends React.Component<IUploadAttachmentProps, IU
       dialogMessage: '',
       isLoading: false
     };
-
-    // Get SPService Factory
+    // Get SPService
     this._spservice = new SPservice(this.props.context);
     // Handlers
     this._closeDialog = this._closeDialog.bind(this);
   }
-  // Fire FileReader event
+  //  FileReader event
   private _onAttachmentUpload(e) {
     e.preventDefault();
     //
@@ -41,8 +40,8 @@ export class UploadAttachment extends React.Component<IUploadAttachmentProps, IU
       isLoading: true
     });
 
-    let reader = new FileReader();
-    let file = e.target.files[0];
+    const reader = new FileReader();
+    const file = e.target.files[0];
 
     reader.onloadend = () => {
       this.setState({
@@ -70,34 +69,28 @@ export class UploadAttachment extends React.Component<IUploadAttachmentProps, IU
   // Render
   public render() {
 
-    const _isLoading = this.state.isLoading ? <ProgressIndicator label="Uploading File..." description="" /> : "";
-    let _commandBar = null;
-    // Type of Button to render
-      _commandBar = (
-        <CommandBar
-          items={[{
-            key: 'Add',
-            name: strings.CommandBarAddAttachmentLabel,
-            iconProps: {
-              iconName: 'Upload'
-            },
-            onClick: this._onAttachmentUpload,
-            disabled: this.props.disabled
-          }]}
-        />
-      );
-    // render compoment
     return (
-      <div className={styles.UploadAttachment}>
 
-        <input id="file-picker" className="ms-TextField-field" style={{ display: 'none' }}
-          type="file"
-          onChange={(e) => this._addAttachment(e)} />
+      <div className={styles.UploadAttachment}>
+        <input id="file-picker" style={{ display: 'none' }} type="file" onChange={(e) => this._addAttachment(e)} />
+
         <div style={{ textAlign: 'left', marginTop: 25, marginBottom: 25 }}>
-          {_commandBar}
+          <CommandBar
+            items={[{
+              key: 'Add',
+              name: strings.CommandBarAddAttachmentLabel,
+              iconProps: {
+                iconName: 'Upload'
+              },
+              onClick: this._onAttachmentUpload,
+              disabled: this.props.disabled
+            }]}
+          />
         </div>
         <div>
-          {_isLoading}
+          {
+            this.state.isLoading ? <ProgressIndicator label="Uploading File..." /> : ""
+          }
         </div>
         <Dialog
           isOpen={this.state.showDialog}
@@ -115,7 +108,6 @@ export class UploadAttachment extends React.Component<IUploadAttachmentProps, IU
   }
   // close dialog
   private _closeDialog(e) {
-    //
     e.preventDefault();
     this.setState({
       showDialog: false,
