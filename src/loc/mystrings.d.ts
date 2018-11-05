@@ -9,6 +9,10 @@ declare interface IControlStrings {
   dialogOKbuttonLabel: string;
   dialogCancelButtonLabel: string;
   dialogOKbuttonLabelOnDelete: string;
+  uploadAttachmentDialogTitle:string;
+  uploadAttachmentButtonLabel:string;
+  uploadAttachmentErrorMsg: String;
+  CommandBarAddAttachmentLabel: string;
 }
 
 declare module 'ControlStrings' {

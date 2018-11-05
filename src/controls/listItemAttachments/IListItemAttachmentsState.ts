@@ -1,4 +1,4 @@
-import {IListItemAttachmentFile } from './IListItemAttachmentFile';
+import {IListItemAttachmentFile } from '../spentities/IListItemAttachmentFile';
 export interface IListItemAttachmentsState {
       file: IListItemAttachmentFile;
       showDialog: boolean;

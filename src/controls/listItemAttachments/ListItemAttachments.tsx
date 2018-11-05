@@ -1,4 +1,4 @@
-
+// Joao Mendes November 2018, SPFx reusable Control
 import * as React from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -7,6 +7,7 @@ import { Label } from "office-ui-fabric-react/lib/Label";
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import * as strings from 'ControlStrings';
 import styles from './ListItemAttachments.module.scss';
+import { UploadAttachment } from '../uploadAttachment';
 import {
   DocumentCard,
   DocumentCardActions,
@@ -17,7 +18,7 @@ import {
 import { ImageFit } from 'office-ui-fabric-react/lib/Image';
 import { IListItemAttachmentsProps } from './IListItemAttachmentsProps';
 import { IListItemAttachmentsState } from './IListItemAttachmentsState';
-import { IListItemAttachmentFile } from './IListItemAttachmentFile';
+import { IListItemAttachmentFile } from '../spentities/IListItemAttachmentFile';
 import SPservice from "../../services/SPservice";
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import utilities from '../../utilities/utilities';
@@ -36,16 +37,15 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       Documents: [],
       deleteAttachment: false
     };
-
     // Get SPService Factory
     this._spservice = new SPservice(this.props.context);
     this._utilities = new utilities();
 
     // registo de event handlers
-    //
     this._onDeleteAttachment = this._onDeleteAttachment.bind(this);
     this._closeDialog = this._closeDialog.bind(this);
-    this._onUploadFile = this._onUploadFile.bind(this);
+    this._onAttachmentpload = this._onAttachmentpload.bind(this);
+    this._onConfirmedDeleteAttachment = this._onConfirmedDeleteAttachment.bind(this);
   }
   // Load Item Attachments
   private async _loadAttachments() {
@@ -62,7 +62,6 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           width: 187,
           height: 130,
         });
-        // console.dir(this.previewImages);
       }
       this.setState({
         showDialog: false,
@@ -73,7 +72,6 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
     catch (error) {
       this.setState({
         showDialog: true,
-        // tslint:disable-next-line:max-line-length
         dialogMessage: strings.errorLoadAttachments.replace('{0}', error.message)
       });
     }
@@ -86,13 +84,22 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
   // Render Attachments
   public render() {
     return (
+
       <div className={styles.ListItemAttachments}>
+        <UploadAttachment
+          listId={this.props.listId}
+          itemId={this.props.itemId}
+          iconButton={true}
+          disabled={false}
+          context={this.props.context}
+          onAttachmentUpload={this._onAttachmentpload}
+        />
+
         {this.state.Documents.map((_file, i: number) => {
           return (
             <div className={styles.documentCardWrapper}>
               <TooltipHost
                 content={_file.FileName}
-                id="attach"
                 calloutProps={{ gapSpace: 0, isBeakVisible: true }} closeDelay={200} directionalHint={DirectionalHint.rightCenter}>
                 <DocumentCard
                   onClickHref={_file.ServerRelativeUrl}
@@ -136,7 +143,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
             isBlocking={true}>
             <DialogFooter>
               {
-                this.state.deleteAttachment ? (<PrimaryButton onClick={this._closeDialog}>{strings.dialogOKbuttonLabelOnDelete}</PrimaryButton>) : ""
+                this.state.deleteAttachment ? (<PrimaryButton onClick={this._onConfirmedDeleteAttachment}>{strings.dialogOKbuttonLabelOnDelete}</PrimaryButton>) : ""
               }
               {
                 this.state.deleteAttachment ? (<DefaultButton onClick={this._closeDialog}>{strings.dialogCancelButtonLabel}</DefaultButton>) : <PrimaryButton onClick={this._closeDialog}>{strings.dialogOKbuttonLabel}</PrimaryButton>
@@ -155,15 +162,19 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
     this.setState({
       showDialog: false,
       dialogMessage: '',
-      deleteAttachment: true,
+      file: null,
+      deleteAttachment: false,
     });
+    this._loadAttachments();
   }
 
-  // On UploadFIle
-  private _onUploadFile(file: any) {
+  // On onAttachmentpload
+  private _onAttachmentpload() {
     //
     this._loadAttachments();
   }
+
+  // On _onDeleteAttachment
   private _onDeleteAttachment(_file: IListItemAttachmentFile) {
     this.setState({
       showDialog: true,
@@ -172,33 +183,30 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       dialogMessage: strings.confirmDelete.replace('{0}', _file.FileName),
     });
   }
-
-
   /*
-  *
+  * Confirmed Delete
   */
- private _onConfirmeDeleteAttachment() {
-  // Delete Attachment
-  const  _file  = this.state.file;
- this._spservice.deleteAttachment(_file.FileName, this.props.listId, this.props.itemId, this.props.webUrl)
-    .then(() => {
+  private _onConfirmedDeleteAttachment() {
+    // Delete Attachment
+    const _file = this.state.file;
+    this._spservice.deleteAttachment(_file.FileName, this.props.listId, this.props.itemId, this.props.webUrl)
+      .then(() => {
 
-      this.setState({
-        showDialog: true,
-        deleteAttachment: false,
-        file: null,
-        dialogMessage: strings.fileDeletedMsg.replace('{0}', _file.FileName),
+        this.setState({
+          showDialog: true,
+          deleteAttachment: false,
+          file: null,
+          dialogMessage: strings.fileDeletedMsg.replace('{0}', _file.FileName),
+        });
+      })
+      .catch((reason) => {
+        this.setState({
+          showDialog: true,
+          file: null,
+          deleteAttachment: false,
+          dialogMessage: strings.fileDeleteError.replace('{0}', _file.FileName).replace('{1}', reason)
+        });
       });
-      this._loadAttachments();
-    })
-    .catch((reason) => {
-      this.setState({
-        showDialog: true,
-        file: null,
-        deleteAttachment: false,
-        dialogMessage: strings.fileDeleteError.replace('{0}', _file.FileName).replace('{1}', reason)
-      });
-    });
-}
+  }
 }
 export default ListItemAttachments;

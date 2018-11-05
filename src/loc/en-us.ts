@@ -1,3 +1,5 @@
+import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
+
 declare var define: any;
 define([], () => {
   return {
@@ -10,6 +12,10 @@ define([], () => {
     dialogTitle: 'List Item Attachment',
     dialogOKbuttonLabel: 'OK',
     dialogCancelButtonLabel: 'Cancel',
-    dialogOKbuttonLabelOnDelete: 'Delete'
+    dialogOKbuttonLabelOnDelete: 'Delete',
+    uploadAttachmentDialogTitle: 'Add Attchment',
+    uploadAttachmentButtonLabel: 'Add Attachment',
+    uploadAttachmentErrorMsg: 'The file {0} was not attached, reason: {1}',
+    CommandBarAddAttachmentLabel: 'Add Attachment'
   };
 });
