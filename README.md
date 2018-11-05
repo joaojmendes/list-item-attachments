@@ -1,6 +1,7 @@
-# ListItemPicker control
+# List-Item-Attachments control
 
-This control allows you to select one or more  item from list, based in a column value, the control suggest values based on characters typed 
+This control allows you to manage list Item Attachments, you can add or delete associated attachments,
+ 
 
 Here is an example of the control:
 

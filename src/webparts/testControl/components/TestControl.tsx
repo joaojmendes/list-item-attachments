@@ -14,8 +14,9 @@ export default class TestControl extends React.Component<ITestControlProps, {}> 
     return (
       <div className={styles.testControl}>
         <div className={styles.container}>
-          <div className={styles.title}>ListItemPicker</div>
-
+          <div className={styles.title}>List-Item-Attachments</div>
+          <div className={styles.subTitle}>ListId: dfa283f4-5faf-4d54-b6b8-5bcaf2725af5</div>
+          <div className={styles.subTitle}>ItemId: 1 </div>
           <ListItemAttachments
             listId='dfa283f4-5faf-4d54-b6b8-5bcaf2725af5'
             itemId={1}
