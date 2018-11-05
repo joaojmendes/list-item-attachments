@@ -9,7 +9,7 @@ Here is an example of the control:
 
 ![ListItemAttachments Confirm Delete](./assets/ListItemAttachmentDeleteConfirm.png)
 
-![ListItemAttachments Attachment Deleted ](./assets/ListItemAttachmentDeleteMsg.png)
+![ListItemAttachments Attachment Deleted ](./assets/ListItemAttachmentDeletedMsg.png)
 
 ## How to use this control in your solutions
 
