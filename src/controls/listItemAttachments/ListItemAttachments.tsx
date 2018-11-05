@@ -16,8 +16,8 @@ import {
   IDocumentCardPreviewImage
 } from 'office-ui-fabric-react/lib/DocumentCard';
 import { ImageFit } from 'office-ui-fabric-react/lib/Image';
-import { IListItemAttachmentsProps } from './IListItemAttachmentsProps';
-import { IListItemAttachmentsState } from './IListItemAttachmentsState';
+import { IListItemAttachmentsProps } from '.';
+import { IListItemAttachmentsState } from '.';
 import { IListItemAttachmentFile } from '../spentities/IListItemAttachmentFile';
 import SPservice from "../../services/SPservice";
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
@@ -160,8 +160,8 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
 
   // close dialog
   private _closeDialog(e) {
-    //
     e.preventDefault();
+
     this.setState({
       showDialog: false,
       dialogMessage: '',
@@ -201,14 +201,17 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           file: null,
           dialogMessage: strings.fileDeletedMsg.replace('{0}', _file.FileName),
         });
+
       })
       .catch((reason) => {
+
         this.setState({
           showDialog: true,
           file: null,
           deleteAttachment: false,
           dialogMessage: strings.fileDeleteError.replace('{0}', _file.FileName).replace('{1}', reason)
         });
+
       });
   }
 }
