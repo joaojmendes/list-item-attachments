@@ -90,7 +90,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           listId={this.props.listId}
           itemId={this.props.itemId}
           iconButton={true}
-          disabled={false}
+          disabled={this.props.disabled}
           context={this.props.context}
           onAttachmentUpload={this._onAttachmentpload}
         />
