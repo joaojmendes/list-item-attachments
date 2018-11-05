@@ -18,29 +18,19 @@ Here is an example of the control:
 
 ```TypeScript
  
-import { ListItemPicker } from '@pnp/spfx-controls-react/listItemPicker';
+import { ListItemAttachments } from '@pnp/spfx-controls-react/listItemAttachments';
 ```
-- Use the `ListItemPicker` control in your code as follows:
+- Use the `ListItemAttachments` control in your code as follows:
 
 ```TypeScript
-          <ListItemPicker
-            listId='da8daf15-d84f-4ab1-9800-7568f82fed3f'
-            columnInternalName='Title'
-            itemLimit={2}
-            onSelectedItem={this.onSelectedItem}
+          <ListItemAttachments
+            listId='dfa283f4-5faf-4d54-b6b8-5bcaf2725af5'
+            itemId={1}
             context={this.props.context}
+            disabled={false}
           />
 ```
 
-- The `onSelectedItem` change event returns the list items selected and can be implemented as follows:
-
-```TypeScript
-private onSelectedItem(data: { key: string; name: string }[]) {
-    for (const item of data) {
-      console.log(`Item value: ${item.name}`);
-    }
-  }
-```
 ## Implementation
 
 The `ListItemPicker` control can be configured with the following properties:
