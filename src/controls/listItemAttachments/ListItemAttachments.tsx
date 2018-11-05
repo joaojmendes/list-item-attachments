@@ -30,6 +30,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
 
   constructor(props: IListItemAttachmentsProps) {
     super(props);
+
     this.state = {
       file: null,
       showDialog: false,
@@ -76,7 +77,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       });
     }
   }
-  //
+  // LoadAttachments
   public componentDidMount() {
     this._loadAttachments();
   }
@@ -100,7 +101,10 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
             <div className={styles.documentCardWrapper}>
               <TooltipHost
                 content={_file.FileName}
-                calloutProps={{ gapSpace: 0, isBeakVisible: true }} closeDelay={200} directionalHint={DirectionalHint.rightCenter}>
+                calloutProps={{ gapSpace: 0, isBeakVisible: true }}
+                closeDelay={200}
+                directionalHint={DirectionalHint.rightCenter}>
+
                 <DocumentCard
                   onClickHref={_file.ServerRelativeUrl}
                   className={styles.documentCard}>
@@ -121,7 +125,6 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
                           disabled: this.props.disabled,
                           onClick: (ev) => {
                             ev.preventDefault();
-                            ev.stopPropagation();
                             this._onDeleteAttachment(_file);
                           }
                         },
@@ -170,7 +173,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
 
   // On onAttachmentpload
   private _onAttachmentpload() {
-    //
+    // load Attachments
     this._loadAttachments();
   }
 
