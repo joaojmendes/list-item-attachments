@@ -33,7 +33,7 @@ import { ListItemAttachments } from '@pnp/spfx-controls-react/listItemAttachment
 
 ## Implementation
 
-The `ListItemPicker` control can be configured with the following properties:
+The `ListItemAttachments` control can be configured with the following properties:
 
 <table style="width: 100%; height: 786px;">
 <tbody>
