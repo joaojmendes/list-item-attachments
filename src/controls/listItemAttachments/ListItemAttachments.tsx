@@ -94,6 +94,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           disabled={this.props.disabled}
           context={this.props.context}
           onAttachmentUpload={this._onAttachmentpload}
+
         />
 
         {this.state.attachments.map((_file, i: number) => {
