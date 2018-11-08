@@ -1,21 +1,21 @@
-import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
 
 declare var define: any;
 define([], () => {
   return {
-    actionDeleteIconTitle: 'Delete',
-    actionDeleteTitle: 'Delete',
-    fileDeletedMsg: 'File {0}  Deleted',
-    fileDeleteError: 'Error on delete file: {0} , error {1}',
-    errorLoadAttachments: 'Error on load list item attachement, error: {0}',
-    confirmDelete: 'are you sure you want send the attachment  {0} to the site recycle bin ?',
-    dialogTitle: 'List Item Attachment',
-    dialogOKbuttonLabel: 'OK',
-    dialogCancelButtonLabel: 'Cancel',
-    dialogOKbuttonLabelOnDelete: 'Delete',
-    uploadAttachmentDialogTitle: 'Add Attchment',
-    uploadAttachmentButtonLabel: 'Add Attachment',
-    uploadAttachmentErrorMsg: 'The file {0} was not attached, reason: {1}',
-    CommandBarAddAttachmentLabel: 'Add Attachment'
+    ListItemAttachmentsActionDeleteIconTitle: 'Delete',
+    ListItemAttachmentsactionDeleteTitle: 'Delete',
+    ListItemAttachmentsfileDeletedMsg: 'File {0} deleted',
+    ListItemAttachmentsfileDeleteError: 'Error on delete file: {0}, reason {1}',
+    ListItemAttachmentserrorLoadAttachments: 'Error on load list item attachment, reason: {0}',
+    ListItemAttachmentsconfirmDelete: 'Are you sure you want send the attachment {0} to the site recycle bin ?',
+    ListItemAttachmentsdialogTitle: 'List Item Attachment',
+    ListItemAttachmentsdialogOKbuttonLabel: 'OK',
+    ListItemAttachmentsdialogCancelButtonLabel: 'Cancel',
+    ListItemAttachmentsdialogOKbuttonLabelOnDelete: 'Delete',
+    ListItemAttachmentsuploadAttachmentDialogTitle: 'Add Attachment',
+    ListItemAttachmentsuploadAttachmentButtonLabel: 'Add Attachment',
+    ListItemAttachmentsuploadAttachmentErrorMsg: 'The file {0} not attached, reason: {1}',
+    ListItemAttachmentsCommandBarAddAttachmentLabel: 'Add Attachment',
+    ListItemAttachmentsloadingMessage: 'Uploading file ...'
   };
 });

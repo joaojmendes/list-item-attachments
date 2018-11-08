@@ -1,4 +1,5 @@
-import { IListItemAttachmentFile } from '../controls/spentities/IListItemAttachmentFile';
+
+import { IListItemAttachmentFile } from './IListItemAttachmentFile';
 export const DOCICONURL_XLSX = "https://static2.sharepointonline.com/files/fabric/assets/item-types/96/xlsx.png";
 export const DOCICONURL_DOCX = "https://static2.sharepointonline.com/files/fabric/assets/item-types/96/docx.png";
 export const DOCICONURL_PPTX = "https://static2.sharepointonline.com/files/fabric/assets/item-types/96/pptx.png";
@@ -20,6 +21,8 @@ export const DOCICONURL_HTML = "https://static2.sharepointonline.com/files/fabri
 export const DOCICONURL_XML = "https://static2.sharepointonline.com/files/fabric/assets/item-types/96/xml.png";
 export const DOCICONURL_SPO = "https://static2.sharepointonline.com/files/fabric/assets/item-types/96/spo.png";
 export const DOCICONURL_VIDEO = "https://static2.sharepointonline.com/files/fabric/assets/item-types/96/video.png";
+
+
 export default class utilities {
   constructor() {
   }

@@ -7,7 +7,8 @@ import { Label } from "office-ui-fabric-react/lib/Label";
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import * as strings from 'ControlStrings';
 import styles from './ListItemAttachments.module.scss';
-import { UploadAttachment } from '../uploadAttachment';
+import { UploadAttachment } from './uploadAttachment';
+import { IListItemAttachmentFile } from './IListItemAttachmentFile';
 import {
   DocumentCard,
   DocumentCardActions,
@@ -18,11 +19,10 @@ import {
 import { ImageFit } from 'office-ui-fabric-react/lib/Image';
 import { IListItemAttachmentsProps } from '.';
 import { IListItemAttachmentsState } from '.';
-import { IListItemAttachmentFile } from '../spentities/IListItemAttachmentFile';
-import SPservice from "../../services/SPservice";
+import SPservice from "../../services/SPService";
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import utilities from '../../utilities/utilities';
-
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import utilities from './utilities';
 export class ListItemAttachments extends React.Component<IListItemAttachmentsProps, IListItemAttachmentsState> {
   private _spservice: SPservice;
   private previewImages: IDocumentCardPreviewImage[];
@@ -36,7 +36,8 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       showDialog: false,
       dialogMessage: '',
       Documents: [],
-      deleteAttachment: false
+      deleteAttachment: false,
+      disableButton: false
     };
     // Get SPService Factory
     this._spservice = new SPservice(this.props.context);
@@ -73,7 +74,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
     catch (error) {
       this.setState({
         showDialog: true,
-        dialogMessage: strings.errorLoadAttachments.replace('{0}', error.message)
+        dialogMessage: strings.ListItemAttachmentserrorLoadAttachments.replace('{0}', error.message)
       });
     }
   }
@@ -118,13 +119,14 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
                         {
                           iconProps: {
                             iconName: 'Delete',
-                            title: strings.actionDeleteIconTitle,
+                            title: strings.ListItemAttachmentsActionDeleteIconTitle,
                           },
-                          title: strings.actionDeleteTitle,
-                          text: strings.actionDeleteTitle,
+                          title: strings.ListItemAttachmentsactionDeleteTitle,
+                          text: strings.ListItemAttachmentsactionDeleteTitle,
                           disabled: this.props.disabled,
                           onClick: (ev) => {
                             ev.preventDefault();
+                            ev.stopPropagation();
                             this._onDeleteAttachment(_file);
                           }
                         },
@@ -137,19 +139,26 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           );
         })}
         {
+
           <Dialog
             isOpen={this.state.showDialog}
             type={DialogType.normal}
             onDismiss={this._closeDialog}
-            title={strings.dialogTitle}
+            title={strings.ListItemAttachmentsdialogTitle}
             subText={this.state.dialogMessage}
             isBlocking={true}>
             <DialogFooter>
+              <div style={{ marginBottom: 7 }}>
+                {
+                  this.state.disableButton ? <Spinner size={SpinnerSize.medium} /> : ''
+                }
+              </div>
               {
-                this.state.deleteAttachment ? (<PrimaryButton onClick={this._onConfirmedDeleteAttachment}>{strings.dialogOKbuttonLabelOnDelete}</PrimaryButton>) : ""
+                this.state.deleteAttachment ? (<PrimaryButton disabled={this.state.disableButton} onClick={this._onConfirmedDeleteAttachment}>{strings.ListItemAttachmentsdialogOKbuttonLabelOnDelete}</PrimaryButton>) : ""
               }
               {
-                this.state.deleteAttachment ? (<DefaultButton onClick={this._closeDialog}>{strings.dialogCancelButtonLabel}</DefaultButton>) : <PrimaryButton onClick={this._closeDialog}>{strings.dialogOKbuttonLabel}</PrimaryButton>
+                this.state.deleteAttachment ? (<DefaultButton disabled={this.state.disableButton} onClick={this._closeDialog}>{strings.ListItemAttachmentsdialogCancelButtonLabel}</DefaultButton>)
+                  : <PrimaryButton onClick={this._closeDialog}>{strings.ListItemAttachmentsdialogOKbuttonLabel}</PrimaryButton>
               }
             </DialogFooter>
           </Dialog>
@@ -183,7 +192,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       showDialog: true,
       deleteAttachment: true,
       file: _file,
-      dialogMessage: strings.confirmDelete.replace('{0}', _file.FileName),
+      dialogMessage: strings.ListItemAttachmentsconfirmDelete.replace('{0}', _file.FileName),
     });
   }
   /*
@@ -192,14 +201,20 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
   private _onConfirmedDeleteAttachment() {
     // Delete Attachment
     const _file = this.state.file;
+
+    this.setState({
+      disableButton: true,
+    });
+
     this._spservice.deleteAttachment(_file.FileName, this.props.listId, this.props.itemId, this.props.webUrl)
       .then(() => {
 
         this.setState({
           showDialog: true,
           deleteAttachment: false,
+          disableButton: false,
           file: null,
-          dialogMessage: strings.fileDeletedMsg.replace('{0}', _file.FileName),
+          dialogMessage: strings.ListItemAttachmentsfileDeletedMsg.replace('{0}', _file.FileName),
         });
 
       })
@@ -209,7 +224,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           showDialog: true,
           file: null,
           deleteAttachment: false,
-          dialogMessage: strings.fileDeleteError.replace('{0}', _file.FileName).replace('{1}', reason)
+          dialogMessage: strings.ListItemAttachmentsfileDeleteError.replace('{0}', _file.FileName).replace('{1}', reason)
         });
 
       });

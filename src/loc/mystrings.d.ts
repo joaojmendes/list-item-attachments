@@ -1,18 +1,20 @@
 declare interface IControlStrings {
-  actionDeleteIconTitle: string;
-  actionDeleteTitle: string;
-  fileDeletedMsg: string;
-  fileDeleteError: string;
-  errorLoadAttachments: string;
-  confirmDelete: string;
-  dialogTitle: string;
-  dialogOKbuttonLabel: string;
-  dialogCancelButtonLabel: string;
-  dialogOKbuttonLabelOnDelete: string;
-  uploadAttachmentDialogTitle:string;
-  uploadAttachmentButtonLabel:string;
-  uploadAttachmentErrorMsg: String;
-  CommandBarAddAttachmentLabel: string;
+  ListItemAttachmentsActionDeleteIconTitle: string;
+  ListItemAttachmentsactionDeleteTitle: string;
+  ListItemAttachmentsfileDeletedMsg: string;
+  ListItemAttachmentsfileDeleteError: string;
+  ListItemAttachmentserrorLoadAttachments: string;
+  ListItemAttachmentsconfirmDelete: string;
+  ListItemAttachmentsdialogTitle: string;
+  ListItemAttachmentsdialogOKbuttonLabel: string;
+  ListItemAttachmentsdialogCancelButtonLabel: string;
+  ListItemAttachmentsdialogOKbuttonLabelOnDelete: string;
+  ListItemAttachmentsuploadAttachmentDialogTitle:string;
+  ListItemAttachmentsuploadAttachmentButtonLabel:string;
+  ListItemAttachmentsuploadAttachmentErrorMsg: String;
+  ListItemAttachmentsCommandBarAddAttachmentLabel: string;
+  ListItemAttachmentsloadingMessage: string;
+
 }
 
 declare module 'ControlStrings' {
