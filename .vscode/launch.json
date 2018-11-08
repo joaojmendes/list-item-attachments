@@ -4,7 +4,24 @@
    * Chrome browser: https://aka.ms/spfx-debugger-extensions
    */
   "version": "0.2.0",
-  "configurations": [{
+  "configurations": [
+    {
+      "name": "Hosted workbench",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://sitenanuvem.sharepoint.com/_layouts/workbench.aspx",
+      "webRoot": "${workspaceRoot}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../../src/*": "${webRoot}/src/*"
+      },
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ]
+    },
+    {
       "name": "Local workbench",
       "type": "chrome",
       "request": "launch",
@@ -20,22 +37,5 @@
         "--remote-debugging-port=9222"
       ]
     },
-    {
-      "name": "Hosted workbench",
-      "type": "chrome",
-      "request": "launch",
-      "url": "https://enter-your-SharePoint-site/_layouts/workbench.aspx",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../../src/*": "${webRoot}/src/*"
-      },
-      "runtimeArgs": [
-        "--remote-debugging-port=9222",
-        "-incognito"
-      ]
-    }
   ]
 }
