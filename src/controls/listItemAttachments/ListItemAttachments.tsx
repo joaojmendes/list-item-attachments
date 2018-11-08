@@ -35,7 +35,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       file: null,
       showDialog: false,
       dialogMessage: '',
-      Documents: [],
+      attachments: [],
       deleteAttachment: false,
       disableButton: false
     };
@@ -68,7 +68,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       this.setState({
         showDialog: false,
         dialogMessage: '',
-        Documents: files
+        attachments: files
       });
     }
     catch (error) {
@@ -91,13 +91,12 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
         <UploadAttachment
           listId={this.props.listId}
           itemId={this.props.itemId}
-          iconButton={true}
           disabled={this.props.disabled}
           context={this.props.context}
           onAttachmentUpload={this._onAttachmentpload}
         />
 
-        {this.state.Documents.map((_file, i: number) => {
+        {this.state.attachments.map((_file, i: number) => {
           return (
             <div className={styles.documentCardWrapper}>
               <TooltipHost
