@@ -9,7 +9,7 @@
       "name": "Hosted workbench",
       "type": "chrome",
       "request": "launch",
-      "url": "https://sitenanuvem.sharepoint.com/_layouts/workbench.aspx",
+      "url": "https://yoursite.sharepoint.com/_layouts/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
