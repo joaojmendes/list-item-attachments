@@ -1,6 +1,6 @@
 # List-Item-Attachments control
 
-This control allows you to manage list Item Attachments, you can add or delete associated attachments, the attachments are listed in tile view.
+This control allows you to manage list item attachments, you can add or delete associated attachments, the attachments are listed in tile view.
  
 
 Here is an example of the control:
@@ -23,58 +23,24 @@ import { ListItemAttachments } from '@pnp/spfx-controls-react/listItemAttachment
 - Use the `ListItemAttachments` control in your code as follows:
 
 ```TypeScript
-          <ListItemAttachments
-            listId='dfa283f4-5faf-4d54-b6b8-5bcaf2725af5'
-            itemId={1}
-            context={this.props.context}
-            disabled={false}
-          />
+<ListItemAttachments listId='dfa283f4-5faf-4d54-b6b8-5bcaf2725af5'
+                     itemId={1}
+                     context={this.props.context}
+                     disabled={false} />
 ```
 
 ## Implementation
 
 The `ListItemAttachments` control can be configured with the following properties:
 
-<table style="width: 100%; height: 786px;">
-<tbody>
-<tr>
-<th style="width: 220px;">Property</th>
-<th>Type</th>
-<th style="width: 85px;">Required</th>
-<th>Description</th>
-</tr>
-<tr>
-<td>listId</td>
-<td>string</td>
-<td>yes</td>
-<td>Gui of List</td>
-</tr>
-<tr>
-<td>itemId</td>
-<td>string</td>
-<td>yes</td>
-<td>List Item Id</td>
-</tr>
-<tr>
-<td>webUrl</td>
-<td>string</td>
-<td>no</td>
-<td>URL of site if different of current site, user must have permissions</td>
-</tr>
-<tr>
-<td>disabled</td>
-<td>Boolean</td>
-<td>no</td>
-<td>Disable Control</td>
-</tr>
-<tr>
-<td>context</td>
-<td>WebPartContext|ApplicationCustomizerContext</td>
-<td>yes</td>
-<td>WebPart or Application customiser context</td>
-</tr>
-</tbody>
-</table>		
 
+| Property | Type | Required | Description |
+| ---- | ---- | ---- | ---- |
+| context | WebPartContext \| ApplicationCustomizerContext | yes | SPFx web part or extention context |
+| listId | string | yes | Guid of the list. |
+| itemId | number | yes | List Item Id  |
+| webUrl | string | no | URL of the site. By default it uses the current site URL. |
+| disabled | boolean | no | Specifies if the control is disabled or not. |
 
-![](https://telemetry.sharepointpnp.com/sp-dev-fx-controls-react/wiki/controls/ListItemPicker)
+![](https://telemetry.sharepointpnp.com/sp-dev-fx-controls-react/wiki/controls/ListItemAttachments)
+
