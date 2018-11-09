@@ -56,9 +56,10 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
       const files: IListItemAttachmentFile[] = await this._spservice.getListItemAttachments(this.props.listId, this.props.itemId);
       for (const _file of files) {
 
+        const _previewImage = await this._utilities.GetFileImageUrl(_file);
         this.previewImages.push({
           name: _file.FileName,
-          previewImageSrc: await this._utilities.GetFileImageUrl(_file),
+          previewImageSrc: _previewImage,
           iconSrc: '',
           imageFit: ImageFit.center,
           width: 187,
@@ -94,7 +95,6 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           disabled={this.props.disabled}
           context={this.props.context}
           onAttachmentUpload={this._onAttachmentpload}
-
         />
 
         {this.state.attachments.map((_file, i: number) => {
@@ -107,7 +107,7 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
                 directionalHint={DirectionalHint.rightCenter}>
 
                 <DocumentCard
-                  onClickHref={_file.ServerRelativeUrl}
+                  onClickHref={ `${_file.ServerRelativeUrl}?web=1`}
                   className={styles.documentCard}>
                   <DocumentCardPreview previewImages={[this.previewImages[i]]} />
                   <Label className={styles.fileLabel}>

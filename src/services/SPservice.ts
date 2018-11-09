@@ -2,7 +2,7 @@ import { ISPService, ILibsOptions, LibsOrderBy } from "./ISPService";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 import { SPHttpClient, SPHttpClientResponse } from "@microsoft/sp-http";
-import {   Web  } from '@pnp/sp';
+import { sp, Web } from '@pnp/sp';
 
 export default class SPService implements ISPService {
 
@@ -65,13 +65,14 @@ export default class SPService implements ISPService {
       await spWeb.lists
         .getById(listId)
         .items.getById(itemId)
-        .attachmentFiles.getByName(fileName)
+        .attachmentFiles.getByName(encodeURIComponent(fileName))
         .delete();
       return;
     } catch (error) {
       return Promise.reject(error);
     }
   }
+
   // Add Attachment
   public async addAttachment(listId: string, itemId: number, fileName: string, file: ArrayBuffer, webUrl?: string): Promise<void> {
     let spWeb: Web;
@@ -82,19 +83,21 @@ export default class SPService implements ISPService {
     }
 
     try {
-     //  Check if Attachment Exists
-     const fileExists = await this.checkAttachmentExists(listId, itemId, fileName, webUrl);
+      // remove special characteres in FileName
+      fileName = fileName.replace(/[^\.\w\s]/gi, '');
+      //  Check if Attachment Exists
+      const fileExists = await this.checkAttachmentExists(listId, itemId, fileName, webUrl);
       // Delete Attachment if exists
-     if ( fileExists ){
-      await this.deleteAttachment(fileName,listId, itemId, webUrl);
-     }
-     // Add Attachment
+      if (fileExists) {
+        await this.deleteAttachment(fileName, listId, itemId, webUrl);
+      }
+      // Add Attachment
       const files = await spWeb.lists
         .getById(listId)
         .items.getById(itemId)
-        .attachmentFiles.add(encodeURIComponent(fileName), file);
+        .attachmentFiles.add(fileName, file);
 
-      return ;
+      return;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -102,7 +105,7 @@ export default class SPService implements ISPService {
 
   // get Attachment
   //
-  public async getAttachment(listId: string, itemId: number, fileName: string,  webUrl?: string): Promise<any> {
+  public async getAttachment(listId: string, itemId: number, fileName: string, webUrl?: string): Promise<any> {
     let spWeb: Web;
     if (typeof webUrl !== "undefined") {
       spWeb = new Web(webUrl);
@@ -120,7 +123,7 @@ export default class SPService implements ISPService {
     }
   }
   // Check if Attachment Exists
-  public async checkAttachmentExists(listId: string, itemId: number, fileName: string,  webUrl?: string): Promise<any>{
+  public async checkAttachmentExists(listId: string, itemId: number, fileName: string, webUrl?: string): Promise<any> {
 
     try {
       const listName = await this.getListName(listId, webUrl);
@@ -129,7 +132,7 @@ export default class SPService implements ISPService {
       const data = await this._context.spHttpClient.get(apiUrl, SPHttpClient.configurations.v1);
       if (data.ok) {
         const results = await data.json();
-        if (results && results.Exists   ) {
+        if (results && results.Exists) {
           return results.Exists;
         }
       }
@@ -153,7 +156,7 @@ export default class SPService implements ISPService {
         .getById(listId)
         .select('RootFolder/Name')
         .expand('RootFolder')
-       .get();
+        .get();
 
       return Promise.resolve(list.RootFolder.Name);
     } catch (error) {
