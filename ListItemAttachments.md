@@ -2,15 +2,23 @@
 
 This control allows you to manage list item attachments, you can add or delete associated attachments, the attachments are listed in tile view.
  
+
+Here is an example of the control:
+
+![ListItemAttachments Tiles](./assets/ListItemAttachmentsTitles.png)
+
+![ListItemAttachments Confirm Delete](./assets/ListItemAttachmentDeleteConfirm.png)
+
+![ListItemAttachments Attachment Deleted ](./assets/ListItemAttachementDeletedMsg.png)
+
 ## How to use this control in your solutions
 
-- intall package  npm install list-item-attachments --save.
-
+- Check that you installed the `@pnp/spfx-controls-react` dependency. Check out the [getting started](../#getting-started) page for more information about installing the dependency.
 - Import the control into your component:
 
 ```TypeScript
  
-import { ListItemAttachments } from 'list-item-attachments/lib/listItemAttachments';
+import { ListItemAttachments } from '@pnp/spfx-controls-react/listItemAttachments';
 ```
 - Use the `ListItemAttachments` control in your code as follows:
 
