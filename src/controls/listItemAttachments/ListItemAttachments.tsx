@@ -109,9 +109,9 @@ export class ListItemAttachments extends React.Component<IListItemAttachmentsPro
           this.state.showPlaceHolder ?
             <Placeholder
               iconName='Upload'
-              iconText='List Item Attachment'
-              description='Please Upload Attachment'
-              buttonLabel='Upload'
+              iconText={strings.ListItemAttachmentslPlaceHolderIconText}
+              description={strings.ListItemAttachmentslPlaceHolderDescription}
+              buttonLabel={strings.ListItemAttachmentslPlaceHolderButtonLabel}
               onConfigure={() => this.setState({ fireUpload: true })} />
             :
 

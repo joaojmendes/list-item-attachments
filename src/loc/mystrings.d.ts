@@ -14,6 +14,9 @@ declare interface IControlStrings {
   ListItemAttachmentsuploadAttachmentErrorMsg: String;
   ListItemAttachmentsCommandBarAddAttachmentLabel: string;
   ListItemAttachmentsloadingMessage: string;
+  ListItemAttachmentslPlaceHolderIconText: string;
+  ListItemAttachmentslPlaceHolderDescription: string;
+  ListItemAttachmentslPlaceHolderButtonLabel: string;
 
 }
 
