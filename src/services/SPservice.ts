@@ -1,7 +1,7 @@
 import { ISPService, ILibsOptions, LibsOrderBy } from "./ISPService";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
-import { SPHttpClient, SPHttpClientResponse } from "@microsoft/sp-http";
+import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from "@microsoft/sp-http";
 import { sp, Web } from '@pnp/sp';
 
 export default class SPService implements ISPService {
@@ -32,56 +32,85 @@ export default class SPService implements ISPService {
 
   // Get ListAttachments
   public async getListItemAttachments(listId: string, itemId: number, webUrl?: string): Promise<any[]> {
-
-    let spWeb: Web;
-    if (typeof webUrl !== "undefined") {
-      spWeb = new Web(webUrl);
-    } else {
-      spWeb = new Web(this._context.pageContext.web.absoluteUrl);
-    }
-
     try {
-      const files = await spWeb.lists
-        .getById(listId)
-        .items.getById(itemId)
-        .attachmentFiles.get();
-
-      return Promise.resolve(files);
+      const webAbsoluteUrl = !webUrl ? this._context.pageContext.web.absoluteUrl : webUrl;
+      const apiUrl = `${webAbsoluteUrl}/_api/web/lists('${listId}')/items(${itemId})/AttachmentFiles`;
+      const data = await this._context.spHttpClient.get(apiUrl, SPHttpClient.configurations.v1);
+      if (data.ok) {
+        const results = await data.json();
+        if (results && results.value && results.value.length > 0) {
+          return results.value;
+        }
+      }
+      return null;
     } catch (error) {
       console.dir(error);
       return Promise.reject(error);
     }
+    /*  let spWeb: Web;
+      if (typeof webUrl !== "undefined") {
+        spWeb = new Web(webUrl);
+      } else {
+        spWeb = new Web(this._context.pageContext.web.absoluteUrl);
+      }
+
+      try {
+        const files = await spWeb.lists
+          .getById(listId)
+          .items.getById(itemId)
+          .attachmentFiles.get();
+
+        return Promise.resolve(files);
+      } catch (error) {
+        console.dir(error);
+        return Promise.reject(error);
+      }*/
   }
 
   // delete attachment
   public async deleteAttachment(fileName: string, listId: string, itemId: number, webUrl?: string): Promise<void> {
-    let spWeb: Web;
-    if (typeof webUrl !== "undefined") {
-      spWeb = new Web(webUrl);
-    } else {
-      spWeb = new Web(this._context.pageContext.web.absoluteUrl);
-    }
+
     try {
-      await spWeb.lists
-        .getById(listId)
-        .items.getById(itemId)
-        .attachmentFiles.getByName(encodeURIComponent(fileName))
-        .delete();
-      return;
+      const spOpts: ISPHttpClientOptions = {
+        headers: { "X-HTTP-Method": 'DELETE', }
+      };
+      const webAbsoluteUrl = !webUrl ? this._context.pageContext.web.absoluteUrl : webUrl;
+      const apiUrl = `${webAbsoluteUrl}/_api/web/lists('${listId}')/items(${itemId})/AttachmentFiles/getByFileName('${encodeURIComponent(fileName)}')`;
+      const data = await this._context.spHttpClient.post(apiUrl, SPHttpClient.configurations.v1, spOpts);
+
+
     } catch (error) {
+      console.dir(error);
       return Promise.reject(error);
     }
+    /* let spWeb: Web;
+     if (typeof webUrl !== "undefined") {
+       spWeb = new Web(webUrl);
+     } else {
+       spWeb = new Web(this._context.pageContext.web.absoluteUrl);
+     }
+     try {
+       await spWeb.lists
+         .getById(listId)
+         .items.getById(itemId)
+         .attachmentFiles.getByName(encodeURIComponent(fileName))
+         .delete();
+       return;
+     } catch (error) {
+       return Promise.reject(error);
+     }*/
   }
 
   // Add Attachment
   public async addAttachment(listId: string, itemId: number, fileName: string, file: ArrayBuffer, webUrl?: string): Promise<void> {
-    let spWeb: Web;
-    if (typeof webUrl !== "undefined") {
-      spWeb = new Web(webUrl);
-    } else {
-      spWeb = new Web(this._context.pageContext.web.absoluteUrl);
-    }
-
+    /*
+      let spWeb: Web;
+      if (typeof webUrl !== "undefined") {
+        spWeb = new Web(webUrl);
+      } else {
+        spWeb = new Web(this._context.pageContext.web.absoluteUrl);
+      }
+  */
     try {
       // remove special characteres in FileName
       fileName = fileName.replace(/[^\.\w\s]/gi, '');
@@ -91,13 +120,23 @@ export default class SPService implements ISPService {
       if (fileExists) {
         await this.deleteAttachment(fileName, listId, itemId, webUrl);
       }
+
       // Add Attachment
+      /*
       const files = await spWeb.lists
         .getById(listId)
         .items.getById(itemId)
         .attachmentFiles.add(fileName, file);
+      */
+      const spOpts: ISPHttpClientOptions = {
+        body: file
+      };
+      const webAbsoluteUrl = !webUrl ? this._context.pageContext.web.absoluteUrl : webUrl;
+      const apiUrl = `${webAbsoluteUrl}/_api/web/lists('${listId}')/items(${itemId})/AttachmentFiles/add(FileName='${encodeURIComponent(fileName)}')`;
+      const data = await this._context.spHttpClient.post(apiUrl, SPHttpClient.configurations.v1, spOpts);
 
       return;
+
     } catch (error) {
       return Promise.reject(error);
     }
@@ -106,21 +145,35 @@ export default class SPService implements ISPService {
   // get Attachment
   //
   public async getAttachment(listId: string, itemId: number, fileName: string, webUrl?: string): Promise<any> {
-    let spWeb: Web;
-    if (typeof webUrl !== "undefined") {
-      spWeb = new Web(webUrl);
-    } else {
-      spWeb = new Web(this._context.pageContext.web.absoluteUrl);
+
+    const webAbsoluteUrl = !webUrl ? this._context.pageContext.web.absoluteUrl : webUrl;
+    const apiUrl = `${webAbsoluteUrl}/_api/web/lists('${listId}')/items(${itemId})/AttachmentFiles/GetByFileBame('${fileName}'))`;
+    const data = await this._context.spHttpClient.get(apiUrl, SPHttpClient.configurations.v1);
+    if (data.ok) {
+      const file = await data.json();
+      if (file) {
+        return file;
+      }
     }
-    try {
-      const file = await spWeb.lists
-        .getById(listId)
-        .items.getById(itemId)
-        .attachmentFiles.getByName(encodeURIComponent(fileName)).get();
-      return Promise.resolve(file);
-    } catch (error) {
-      return Promise.reject(error);
-    }
+
+    return null;
+    /*
+      let spWeb: Web;
+      if (typeof webUrl !== "undefined") {
+        spWeb = new Web(webUrl);
+      } else {
+        spWeb = new Web(this._context.pageContext.web.absoluteUrl);
+      }
+      try {
+        const file = await spWeb.lists
+          .getById(listId)
+          .items.getById(itemId)
+          .attachmentFiles.getByName(encodeURIComponent(fileName)).get();
+        return Promise.resolve(file);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+      */
   }
   // Check if Attachment Exists
   public async checkAttachmentExists(listId: string, itemId: number, fileName: string, webUrl?: string): Promise<any> {
@@ -145,22 +198,37 @@ export default class SPService implements ISPService {
 
   // Get ListName
   public async getListName(listId: string, webUrl?: string): Promise<string> {
-    let spWeb: Web;
-    if (typeof webUrl !== "undefined") {
-      spWeb = new Web(webUrl);
-    } else {
-      spWeb = new Web(this._context.pageContext.web.absoluteUrl);
-    }
-    try {
-      const list = await spWeb.lists
-        .getById(listId)
-        .select('RootFolder/Name')
-        .expand('RootFolder')
-        .get();
 
-      return Promise.resolve(list.RootFolder.Name);
-    } catch (error) {
-      return Promise.reject(error);
+    const webAbsoluteUrl = !webUrl ? this._context.pageContext.web.absoluteUrl : webUrl;
+    const apiUrl = `${webAbsoluteUrl}/_api/web/lists('${listId}')?$select=RootFolder/Name&$expand=RootFolder)`;
+    const data = await this._context.spHttpClient.get(apiUrl, SPHttpClient.configurations.v1);
+    if (data.ok) {
+      const results = await data.json();
+      if (results) {
+        return results.RootFolder.Name;
+      }
     }
+    return;
+    /*
+     let spWeb: Web;
+     if (typeof webUrl !== "undefined") {
+       spWeb = new Web(webUrl);
+     } else {
+       spWeb = new Web(this._context.pageContext.web.absoluteUrl);
+     }
+     try {
+       const list = await spWeb.lists
+         .getById(listId)
+         .select('RootFolder/Name')
+         .expand('RootFolder')
+         .get();
+
+       return Promise.resolve(list.RootFolder.Name);
+     } catch (error) {
+       return Promise.reject(error);
+     }
+   }
+   */
   }
+  //
 }
